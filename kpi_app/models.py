@@ -79,3 +79,49 @@ class Questions(models.Model):
         verbose_name_plural = "Kategoriyaning Savollari"
         
 
+class UserFileUplaod(models.Model):
+    unique_id = models.UUIDField("ID", default=uuid.uuid4, editable=False, unique=True)
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE,verbose_name='Avtor')
+    files = models.FileField(upload_to='user_files',verbose_name='Fayl')
+    question = models.ForeignKey(Questions, on_delete=models.CASCADE,verbose_name='Qaysi savolga yuborilgani')
+    date = models.DateField(auto_now_add=True,auto_created=False,verbose_name='Kiritilgan sana')
+    
+    def __str__(self):
+        return f"{self.author.first_name} {self.author.last_name}"
+    
+    class Meta:
+        verbose_name = "Foydalanuvchi qo'shgan ma'lumotlari"
+        verbose_name_plural = "Foydalanuvchi qo'shgan ma'lumotlari"
+    
+    
+
+class BallToFile(models.Model):
+    unique_id = models.UUIDField("ID", default=uuid.uuid4, editable=False, unique=True)
+    author = models.ManyToManyField(CustomUser,verbose_name='Avtor')
+    ball = models.FloatField(default=0,verbose_name="Qo'yilgan ball")
+    total_ball = models.IntegerField(default=0)
+    files = models.ForeignKey(UserFileUplaod, on_delete = models.CASCADE,verbose_name="Yuklangan faylgan ball qo'yilgan")
+    date = models.DateField(auto_created=False,auto_now_add=True,verbose_name="Ball")
+    
+    def __str__(self):
+        return f"{self.author}"
+    
+    class Meta:
+        verbose_name = "Baholovchi qo'shilgan ma'lumotga ball qo'shishi"
+        verbose_name_plural = "Baholovchi qo'shilgan ma'lumotga ball qo'shishi"
+
+
+class PenaltyUplaodFile(models.Model):
+    unique_id = models.UUIDField("ID", default=uuid.uuid4, editable=False, unique=True)
+    author = models.ManyToManyField(CustomUser,verbose_name='Avtor')
+    ball = models.FloatField(default=0,verbose_name="Qo'yilgan ball")
+    get_file = models.ForeignKey(UserFileUplaod, on_delete = models.CASCADE,verbose_name="Yuklangan faylgan ball qo'yilgan")
+    files = models.FileField(upload_to='penalty_file',verbose_name="Jarima ballni isbotlash uchun Fayl yuklanganligi")
+    date = models.DateField(auto_created=False,auto_now_add=True,verbose_name="Ball")
+    
+    def __str__(self):
+        return f"{self.author}"
+    
+    class Meta:
+        verbose_name = "Jarima Ballari"
+        verbose_name_plural = "Jarima Ballari"

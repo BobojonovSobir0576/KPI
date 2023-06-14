@@ -32,3 +32,14 @@ class QuestionsAdmin(admin.ModelAdmin):
 class PenaltyPointForQuestionsAdmin(admin.ModelAdmin):
     list_display = ('description','unique_id')
     
+@admin.register(UserFileUplaod)
+class UserFileUplaodAdmin(admin.ModelAdmin):
+    list_display = ('author','unique_id','files','question','date')
+    
+@admin.register(BallToFile)
+class BallToFileAdmin(admin.ModelAdmin):
+    list_display = ('unique_id','ball','files','date')
+    
+@admin.register(PenaltyUplaodFile)
+class PenaltyUplaodFileAdmin(admin.ModelAdmin):
+    list_display = ('unique_id','ball','files','date')

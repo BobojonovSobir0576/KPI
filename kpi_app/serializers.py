@@ -65,3 +65,75 @@ class QuestionSerializers(serializers.ModelSerializer):
     class Meta:
         model = Questions
         fields = ['unique_id','question','date_of_calculation_ball','ball_of_question','description','penalty_id','categories_id']
+        
+        
+
+class UserFileUploadSerializers(serializers.ModelSerializer):    
+    class Meta:
+        model = UserFileUplaod
+        fields = ['author','files','question','date']
+        
+    def create(self, validated_data):
+        create = UserFileUplaod.objects.create(
+            author = self.context.get('user'),
+            question = self.context.get('unique_id'),
+            files = self.context.get('files'),
+        )
+        return create
+          
+        
+        
+class BallToFileUploadSerializers(serializers.ModelSerializer):    
+    class Meta:
+        model = BallToFile
+        fields = ['author','files','ball','date']
+        
+    def create(self, validated_data):
+        update = BallToFile.objects.filter(files__unique_id=self.context.get('files').unique_id).first()
+        if update:
+            update.author.add(self.context.get('user'))
+            update.ball  = update.ball + validated_data['ball']
+            update.save()
+            return update
+        else:
+            create = BallToFile.objects.create(
+                ball = validated_data.get('ball'),
+                files = self.context.get('files'),
+            )
+            create.total_ball = create.total_ball + create.ball
+            create.author.add(self.context.get('user'))
+            create.save()
+            return create
+        
+
+class PenaltyUplaodFileSerializers(serializers.ModelSerializer):    
+    class Meta:
+        model = PenaltyUplaodFile
+        fields = ['author','files','ball','date']
+        
+    def create(self, validated_data):
+        update = PenaltyUplaodFile.objects.filter(get_file=self.context.get('get_file')).first()
+        if update:
+            print('Yes')
+            update.author.add(self.context.get('user'))
+            update.ball  = update.ball + validated_data['ball']
+            update.save()
+            
+            update_ball_to_file = BallToFile.objects.filter(files = self.context.get('get_file')).first()
+            update_ball_to_file.ball = update_ball_to_file.ball - validated_data['ball']
+            update_ball_to_file.save()
+            return update
+        else:
+            print('No')
+            create = PenaltyUplaodFile.objects.create(
+                ball = validated_data.get('ball'),
+                files = self.context.get('files'),
+                get_file = self.context.get('get_file'),
+            )
+            create.author.add(self.context.get('user'))
+            create.save()
+            
+            update_ball_to_file = BallToFile.objects.filter(files = self.context.get('get_file')).first()
+            update_ball_to_file.ball = update_ball_to_file.ball - validated_data['ball']
+            update_ball_to_file.save()
+            return create

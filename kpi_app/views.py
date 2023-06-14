@@ -96,3 +96,46 @@ class QuestionView(APIView):
         serializers = QuestionSerializers(main_categories,many=True)
         return Response(serializers.data,status=status.HTTP_200_OK)
     
+
+class UserFileUploadView(APIView):
+    permission_classes = [IsAuthenticated]
+    render_classes = [UserRenderers]
+    
+    def post(self, request, unique_id, format=None):
+        question_get = get_object_or_404(Questions,unique_id = unique_id)
+        serializers = UserFileUploadSerializers(data=request.data, partial=True,context = {'user':request.user,'files':request.FILES.get('files'),'unique_id':question_get})
+        if serializers.is_valid(raise_exception=True):
+            serializers.save()
+            return Response({'msg':'Files is uploaded'},status=status.HTTP_201_CREATED)
+        return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
+        
+        
+    
+
+class BallToFileUploadView(APIView):
+    permission_classes = [IsAuthenticated]
+    render_classes = [UserRenderers]
+    
+    def post(self, request,unique_id, format=None):
+        files_get = get_object_or_404(UserFileUplaod,unique_id = unique_id)
+        serializers = BallToFileUploadSerializers(data=request.data, partial=True,context = {'user':request.user,'files':files_get})
+        if serializers.is_valid(raise_exception=True):
+            serializers.save()
+            return Response({'msg':'Files is uploaded'},status=status.HTTP_201_CREATED)
+        return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
+    
+    
+class PenaltyUplaodFileView(APIView):
+    permission_classes = [IsAuthenticated]
+    render_classes = [UserRenderers]
+    
+    def post(self, request,unique_id, format=None):
+        files_get = get_object_or_404(UserFileUplaod,unique_id = unique_id)
+        serializers = PenaltyUplaodFileSerializers(data=request.data, partial=True,context = {'user':request.user,'files':request.FILES.get('files'),"get_file":files_get})
+        if serializers.is_valid(raise_exception=True):
+            serializers.save()
+            return Response({'msg':'Files is uploaded'},status=status.HTTP_201_CREATED)
+        return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
+    
+    
+`       `
