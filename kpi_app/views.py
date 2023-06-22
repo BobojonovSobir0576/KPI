@@ -2,8 +2,10 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponsePermanentRedirect
 from django.shortcuts import get_object_or_404
+from django.core.serializers import serialize
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import *
+from django.forms.models import model_to_dict
 
 from kpi_app.serializers import *
 from kpi_app.renderers import *
@@ -16,6 +18,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+import json
 
 def get_token_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -71,20 +74,19 @@ class MainCategoriesView(APIView):
     render_classes = [UserRenderers]
     
     def get(self,request,format = None):
+        send_list = []
         main_categories = MainCategories.objects.filter_categories(request.user)
-        serializers = MainCategoriesSerializers(main_categories,many=True)
-        return Response(serializers.data,status=status.HTTP_200_OK)
+        for i in main_categories:
+            get_category = Categories.objects.filter(main_categories_id__unique_id = i.unique_id)
+            serialized_data = serialize("json", get_category)
+            serialized_data = json.loads(serialized_data)
+            send_list.append({
+                'main_cate':i.name,
+                'categories': serialized_data
+            })
+        return Response(json.loads(json.dumps(list(send_list))) ,status=status.HTTP_200_OK)
     
 
-class CategoriesView(APIView):
-    permission_classes = [IsAuthenticated]
-    render_classes = [UserRenderers]
-    
-    def get(self,request,unique_id,format = None):
-        main_categories = Categories.objects.filter_categories(unique_id)
-        serializers = CategoriesSerializers(main_categories,many=True)
-        return Response(serializers.data,status=status.HTTP_200_OK)
-    
     
 class QuestionView(APIView):
     permission_classes = [IsAuthenticated]
