@@ -24,7 +24,7 @@ def get_token_for_user(user):
         'accsess':str(refresh.access_token)
     }
 
-
+# Login qilish -------------------
 class UserLoginView(APIView):
     render_classes = [UserRenderers]
     
@@ -64,7 +64,8 @@ class UserLogoutView(APIView):
         token = RefreshToken(token=refresh_token)
         token.blacklist()
         return Response({"status": "OK, goodbye"})
-    
+# Login qilish -------------------
+
 
 class MainCategoriesView(APIView):
     permission_classes = [IsAuthenticated]
@@ -110,8 +111,6 @@ class UserFileUploadView(APIView):
         return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
         
         
-    
-
 class BallToFileUploadView(APIView):
     permission_classes = [IsAuthenticated]
     render_classes = [UserRenderers]
@@ -138,4 +137,3 @@ class PenaltyUplaodFileView(APIView):
         return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
     
     
-`       `
