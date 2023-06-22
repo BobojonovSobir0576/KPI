@@ -31,7 +31,7 @@ class UserPorfilesSerializers(serializers.ModelSerializer):
     
     class Meta:
         model = CustomUser
-        fields = ['username','groups','first_name','last_name',]
+        fields = ['username','groups','first_name','last_name','position']
         
 
 
