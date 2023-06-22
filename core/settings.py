@@ -14,7 +14,7 @@ SECRET_KEY = 'django-insecure-=89%jf_1+ondo2@q1yy7cll#^+%*hik7iu)n0=teyxrqbkve%q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.ngrok.io']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -159,5 +159,6 @@ AUTH_USER_MODEL = 'kpi_app.CustomUser'
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:8000",
+    "http://45.12.72.210:8585",
     "http://localhost:5173",
 ]
