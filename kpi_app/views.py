@@ -86,6 +86,23 @@ class MainCategoriesView(APIView):
             })
         return Response(json.loads(json.dumps(list(send_list))) ,status=status.HTTP_200_OK)
     
+    
+class MainCategoriesUserView(APIView):
+    permission_classes = [IsAuthenticated]
+    render_classes = [UserRenderers]
+    
+    def get(self,request,format = None):
+        send_list = []
+        main_categories = MainCategories.objects.all()
+        for i in main_categories:
+            get_category = Categories.objects.filter(main_categories_id__unique_id = i.unique_id)
+            serialized_data = serialize("json", get_category)
+            serialized_data = json.loads(serialized_data)
+            send_list.append({
+                'main_cate':i.name, 
+                'categories': serialized_data
+            })
+        return Response(json.loads(json.dumps(list(send_list))) ,status=status.HTTP_200_OK)
 
     
 class QuestionView(APIView):
