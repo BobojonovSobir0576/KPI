@@ -17,7 +17,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+import collections, functools, operator
 
+from collections import defaultdict
 import json
 
 def get_token_for_user(user):
@@ -167,7 +169,7 @@ class SendFiles(APIView):
     
     
 class UserGetTotalBall(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]          
     render_classes = [UserRenderers]
     
     def get(self,request,format=None):
@@ -178,9 +180,17 @@ class UserGetTotalBall(APIView):
             get_files = BallToFile.objects.filter(files__author__unique_id = i.unique_id)
             for k in get_files: 
                 lists.append({
+                    'ball': k.ball // len(k.author.all()),
                     'name':i.first_name +" "+i.last_name,
-                    'ball': k.ball // len(k.author.all())
                 })    
+        aggregated_data = {}
+                
+        for dictionary in lists:
+            key = (dictionary['name'])
+        
+            aggregated_data[key] = aggregated_data.get(key, 0) + dictionary['ball']
+            
+        lists = [{'name': key, 'ball': value} for key, value in aggregated_data.items()]
         return Response(list(lists),status=status.HTTP_200_OK)
     
     
