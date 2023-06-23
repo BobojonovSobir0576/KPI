@@ -89,7 +89,7 @@ class BallToFileUploadSerializers(serializers.ModelSerializer):
         fields = ['author','files','ball','date']
         
     def create(self, validated_data):
-        update = BallToFile.objects.filter(files__unique_id=self.context.get('files')).first()
+        update = BallToFile.objects.filter(files__unique_id=self.context.get('files').unique_id).first()
         if update:
             update.author.add(self.context.get('user'))
             update.ball  = update.ball + validated_data['ball']
