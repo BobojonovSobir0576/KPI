@@ -164,3 +164,15 @@ class SendFiles(APIView):
         get_files = UserFileUplaod.objects.filter(question__categories_id = categories_get)
         serializers = FilesSendSerializers(get_files,many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
+    
+    
+class UserGetTotalBall(APIView):
+    permission_classes = [IsAuthenticated]
+    render_classes = [UserRenderers]
+    
+    def get(self,request,format=None):
+        
+        
+        return Response()
+    
+    
