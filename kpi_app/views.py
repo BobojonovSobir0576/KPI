@@ -171,7 +171,18 @@ class UserGetTotalBall(APIView):
     render_classes = [UserRenderers]
     
     def get(self,request,format=None):
+        user = CustomUser.objects.filter(groups__name__in = ['Foydalanuvchi'])
+        lists = []
+        for i in user:
+            print(i.first_name)
+            get_files = BallToFile.objects.filter(files__author__unique_id = i.unique_id)
+            for k in get_files: 
+                lists.append({
+                    'name':i.first_name +" "+i.last_name,
+                    'ball': k.ball
+                })
         
+        print(lists)
         
         return Response()
     

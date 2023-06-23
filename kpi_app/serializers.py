@@ -96,7 +96,7 @@ class BallToFileUploadSerializers(serializers.ModelSerializer):
             update.save()
             return update
         else:
-            create = BallToFile.objects.create(
+            create = BallToFile.objects.create( 
                 ball = validated_data.get('ball'),
                 files = self.context.get('files'),
             )
@@ -120,7 +120,7 @@ class PenaltyUplaodFileSerializers(serializers.ModelSerializer):
             update.save()
             
             update_ball_to_file = BallToFile.objects.filter(files = self.context.get('get_file')).first()
-            update_ball_to_file.ball = update_ball_to_file.ball - validated_data['ball']
+            update_ball_to_file.ball = update_ball_to_file.ball + validated_data['ball']
             update_ball_to_file.save()
             return update
         else:
@@ -134,7 +134,7 @@ class PenaltyUplaodFileSerializers(serializers.ModelSerializer):
             create.save()
             
             update_ball_to_file = BallToFile.objects.filter(files = self.context.get('get_file')).first()
-            update_ball_to_file.ball = update_ball_to_file.ball - validated_data['ball']
+            update_ball_to_file.ball = update_ball_to_file.ball + validated_data['ball']
             update_ball_to_file.save()
             return create
         

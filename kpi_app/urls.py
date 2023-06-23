@@ -12,5 +12,6 @@ urlpatterns = [
     path('user_file_upload/<uuid:unique_id>/',views.UserFileUploadView.as_view()),
     path('user_files_get/<uuid:unique_id>/',views.SendFiles.as_view()),
     path('ball_to_file_upload/<uuid:unique_id>/',views.BallToFileUploadView.as_view()),
-    path('penalty_upload_file/<uuid:unique_id>/',views.PenaltyUplaodFileView.as_view())
+    path('penalty_upload_file/<uuid:unique_id>/',views.PenaltyUplaodFileView.as_view()),
+    path('send_files/',views.UserGetTotalBall.as_view())
 ]
