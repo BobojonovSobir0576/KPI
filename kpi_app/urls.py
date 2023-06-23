@@ -10,6 +10,7 @@ urlpatterns = [
     path('main_categories_user/',views.MainCategoriesUserView().as_view()),
     path('question/<uuid:unique_id>/',views.QuestionView.as_view()),
     path('user_file_upload/<uuid:unique_id>/',views.UserFileUploadView.as_view()),
+    path('user_files_get/<uuid:unique_id>/',views.SendFiles.as_view()),
     path('ball_to_file_upload/<uuid:unique_id>/',views.BallToFileUploadView.as_view()),
     path('penalty_upload_file/<uuid:unique_id>/',views.PenaltyUplaodFileView.as_view())
 ]

@@ -154,4 +154,12 @@ class PenaltyUplaodFileView(APIView):
             return Response({'msg':'Files is uploaded'},status=status.HTTP_201_CREATED)
         return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
     
+
+class SendFiles(APIView):
+    permission_classes = [IsAuthenticated]
+    render_classes = [UserRenderers]
     
+    def get(self,request,unique_id, format=None):
+        get_files = UserFileUplaod.objects.filter(question__unique_id = unique_id)
+        serializers = FilesSendSerializers(get_files,many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)

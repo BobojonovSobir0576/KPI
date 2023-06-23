@@ -137,3 +137,10 @@ class PenaltyUplaodFileSerializers(serializers.ModelSerializer):
             update_ball_to_file.ball = update_ball_to_file.ball - validated_data['ball']
             update_ball_to_file.save()
             return create
+        
+class FilesSendSerializers(serializers.ModelSerializer):
+    author = UserPorfilesSerializers(read_only=True)
+    question = QuestionSerializers(read_only=True)
+    class Meta:
+        model = UserFileUplaod
+        fields = ['unique_id','files','author','question','date']
