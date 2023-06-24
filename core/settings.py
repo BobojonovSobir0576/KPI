@@ -161,4 +161,5 @@ CORS_ORIGIN_WHITELIST = [
     "http://localhost:8000",
     "http://45.12.72.210:8585",
     "http://localhost:5173",
+    "http://q1w2e.beget.tech"
 ]
