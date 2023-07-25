@@ -2,12 +2,16 @@ from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth.models import User,Group
 from django.contrib.auth.hashers import make_password
+from django.core.exceptions import ValidationError
 
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from rest_framework.exceptions import AuthenticationFailed
 
 from kpi_app.models import *
+
+    
+
 
 
 
@@ -74,12 +78,17 @@ class UserFileUploadSerializers(serializers.ModelSerializer):
         fields = ['author','files','question','date']
         
     def create(self, validated_data):
-        create = UserFileUplaod.objects.create(
-            author = self.context.get('user'),
-            question = self.context.get('unique_id'),
-            files = self.context.get('files'),
-        )
-        return create
+        filesize = self.context.get('files').size
+    
+        if filesize > 10485760:
+            raise serializers.ValidationError("You cannot upload file more than 10Mb")
+        else:
+            create = UserFileUplaod.objects.create(
+                author = self.context.get('user'),
+                question = self.context.get('unique_id'),
+                files = self.context.get('files'),
+            )
+            return create
           
         
         
