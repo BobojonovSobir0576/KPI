@@ -105,10 +105,21 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'kpi',
+        'USER': 'postgres',
+        'PASSWORD': '1',
+        'HOST': 'localhost',
+        'PORT': 5432
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 # Password validation
@@ -162,5 +173,6 @@ CORS_ORIGIN_WHITELIST = [
     "http://localhost:8000",
     "http://45.12.72.210:8585",
     "http://localhost:5173",
-    "http://q1w2e.beget.tech"
+    "http://q1w2e.beget.tech",
+    "http://45.12.72.210:9000"
 ]
